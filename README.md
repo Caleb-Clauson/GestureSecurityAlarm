@@ -49,10 +49,6 @@ Built using Google's Teachable Machine for training, Python for gesture detectio
   - Test hardware first in Arduino Serial Monitor: type "ON" (green LED) or "OFF" (red LED + buzzer).
   - Close other serial apps (e.g., Arduino IDE) before running Python.
 
-## Video
-[Demo + Setup Guide](#) *(Insert YouTube link after upload)*  
-Watch me demo the alarm and share tips like centering your hand and using 'q' to exit!
-
 ## License
 This project is licensed under the MIT License—see [LICENSE](#) for details.
 
