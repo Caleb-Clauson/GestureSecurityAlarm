@@ -1,0 +1,41 @@
+#define GREEN_LED 8
+#define RED_LED 10
+#define BUZZER 7
+
+unsigned long lastBeepTime = 0;
+const unsigned long beepInterval = 1000;  // 1-second interval
+bool isNotAuthorized = false;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  digitalWrite(BUZZER, LOW);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    if (command == "ON") {
+      isNotAuthorized = false;
+      digitalWrite(GREEN_LED, HIGH);
+      digitalWrite(RED_LED, LOW);
+      digitalWrite(BUZZER, LOW);
+    } else if (command == "OFF") {
+      isNotAuthorized = true;
+      digitalWrite(GREEN_LED, LOW);
+    }
+  }
+
+  if (isNotAuthorized && millis() - lastBeepTime >= beepInterval) {
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(BUZZER, HIGH);
+    delay(200);  // 200ms beep
+    digitalWrite(BUZZER, LOW);
+    digitalWrite(RED_LED, LOW);
+    lastBeepTime = millis();
+  }
+}
