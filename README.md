@@ -10,10 +10,10 @@ This is my IT 254 Project 1 submission—a gesture-based security system combini
 Built using Google's Teachable Machine for training, Python for gesture detection, and serial communication to control an Arduino with two LED lights and a buzzer.
 
 ## Files
-- **`AdruinoModel.py`**: Python script for webcam capture, gesture prediction, and serial communication with Arduino.
-- **`SecurityAlarm.ino`**: Arduino sketch to control green LED (pin 13), red LED (pin 12), and buzzer (pin 11) based on serial commands.
+- **`Python Code`**: Python script for webcam capture, gesture prediction, and serial communication with Arduino.
+- **`Arduino Code`**: Arduino sketch to control green LED (pin 13), red LED (pin 12), and buzzer (pin 11) based on serial commands.
 - **`labels.txt`**: Class labels from Teachable Machine ("0 Thumbs Up," "1 Not Authorized").
-- **`keras_model.h5`**: Trained TensorFlow model (if uploaded; otherwise, retrain via Teachable Machine).
+- **`keras_model.h5`**: Trained TensorFlow model (Can be retrained if needed)
 
 ## Requirements
 - **Hardware**:
