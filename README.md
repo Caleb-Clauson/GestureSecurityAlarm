@@ -28,9 +28,9 @@ Built using Google's Teachable Machine for training, Python for gesture detectio
 
 ## Setup
 1. **Hardware Setup**:
-   - Connect green LED (anode to pin 13, cathode to GND via 220-330 ohm resistor).
-   - Connect red LED (anode to pin 12, cathode to GND via resistor).
-   - Connect buzzer (positive to pin 11, negative to GND—resistor optional if active type).
+   - Connect green LED (anode to pin 8, cathode to GND via 220-330 ohm resistor).
+   - Connect red LED (anode to pin 10, cathode to GND via resistor).
+   - Connect buzzer (positive to pin 7, negative to GND—resistor optional if active type).
    - Plug Arduino into your computer via USB.
 2. **Software Setup**:
    - Open `SecurityAlarm.ino` in Arduino IDE, upload to your board (Tools > Port: check your port, e.g., `/dev/cu.usbmodem1101`).
