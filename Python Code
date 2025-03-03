@@ -1,0 +1,104 @@
+import os
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+import cv2
+import numpy as np
+np.set_printoptions(suppress=True)
+import serial
+from tensorflow.keras.layers import DepthwiseConv2D
+
+# Use your active port
+port = "/dev/cu.usbmodem1101"
+baud_rate = 9600 # Must match Arduino sketch (9600 baud)
+arduino = serial.Serial(port, baud_rate, timeout=1)
+
+# Custom layer to handle Teachable Machine model’s DepthwiseConv2D
+class CustomDepthwiseConv2D(DepthwiseConv2D):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("groups", None)
+        super().__init__(*args, **kwargs)
+
+# Load the model. Use your model's filepath
+model = load_model(
+    "/Users/calebclauson/Desktop/converted_keras/keras_model.h5",
+    compile=False,
+    custom_objects={"DepthwiseConv2D": CustomDepthwiseConv2D}
+)
+
+#Use your file path for your class names
+class_names = open("/Users/calebclauson/Desktop/converted_keras/labels.txt", "r").readlines()
+
+# Initialize webcam (0 = default camera)
+camera = cv2.VideoCapture(0)
+camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+print(f"Resolution: {camera.get(cv2.CAP_PROP_FRAME_WIDTH)}x{camera.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
+
+# Create display window—size matches Teachable Machine’s preview
+cv2.namedWindow("Webcam Image", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("Webcam Image", 600, 600)
+
+frame_skip = 5  # Predict every 5th frame to reduce lag
+frame_count = 0
+last_message = ""  # Track last sent command to avoid repeats
+
+print("Press 'q' or Esc to exit the program.")  # User instruction for exiting the program
+
+try:
+    while True:
+        ret, image = camera.read()
+        if not ret:
+            print("Error: Failed to grab frame")
+            break
+        image = cv2.flip(image, 1)
+        h, w = image.shape[:2]
+        size = min(h, w) * 0.9 # 90% camera crop
+        start_x = (w - size) // 2
+        start_y = (h - size) // 2
+        image_cropped = image[int(start_y):int(start_y+size), int(start_x):int(start_x+size)]
+        image_resized = cv2.resize(image_cropped, (224, 224), interpolation=cv2.INTER_AREA)
+        cv2.imwrite("/Users/calebclauson/Desktop/test_224.jpg", image_resized)
+        cv2.imshow("Webcam Image", image_resized)
+
+        if frame_count % frame_skip == 0:
+            image_rgb = cv2.cvtColor(image_resized, cv2.COLOR_BGR2RGB)
+            image_input = image_rgb.astype('float32') / 255.0
+            image_input = image_input.reshape((1, 224, 224, 3))
+            prediction = model.predict(image_input)
+            index = np.argmax(prediction)
+            class_name = class_names[index]
+            class_label = class_name[2:].strip().lower()
+            confidence_score = prediction[0][index]
+            confidence_score = prediction[0][index]  # Confidence of prediction
+            print(f"Predicted: {class_label} ({confidence_score*100:.2f}%)")  # Show the result
+
+            message_to_send = "" # Command to send to Arduino
+            
+            if class_label == 'thumbs up' and prediction[0][0] > 0.6: # 60% 'thumbs up' threshold
+                message_to_send = "ON\n"
+                print("Detected Thumbs Up - Turning ON Green LED")
+            elif class_label == 'not authorized' and prediction[0][1] > 0.9: # 90% 'not authorized' threshold
+                message_to_send = "OFF\n"
+                print("Detected Not Authorized - Pulsing Red LED and Buzzer")
+
+            if message_to_send and message_to_send != last_message:  # Send only if changed
+                arduino.write(message_to_send.encode('utf-8'))  # Send command to Arduino
+                arduino.flush()  # Ensure command is sent
+                print(f"Sent: {message_to_send.strip()}")  # Confirm send
+                last_message = message_to_send  # Update last message
+
+        frame_count += 1
+        key = cv2.waitKey(1)
+        if key == ord('q') or key == 27:  # 'q' or Esc to exit
+            print("Exiting program...")
+            break
+
+except serial.SerialException as e:
+    print(f"Serial Error: {e}")
+
+finally:
+    arduino.close()  # Close serial port
+    print("Serial port closed")
+    camera.release()  # Release webcam
+    cv2.destroyAllWindows()  # Close display window
