@@ -7,6 +7,7 @@ This is my IT 254 Project 1 submission—a gesture-based security system combini
 - **Not Authorized**: Triggers an "Unathorized User" with a red LED and a buzzer pulsing every 1 second.
 - **Purpose**: A fun, simple demo of Artificial Intelligence and microelectronics—thumbs-up grants access, other gestures sound a controlled alarm.
 - **YouTube Video**: Here is a YouTube video that shows an overview of the project
+- https://youtu.be/rwfLX1uKJag
 
 Built using Google's Teachable Machine for training, Python for gesture detection, and serial communication to control an Arduino with two LED lights and a buzzer.
 
