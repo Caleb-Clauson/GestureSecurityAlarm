@@ -57,4 +57,4 @@ This project is licensed under the MIT License—see [LICENSE](#) for details.
 ## Notes
 - Trained with Teachable Machine’s blurred-background webcam—real-world backgrounds may need model retraining for perfection.
 - Usually works the best when the users face is centered in the camera. Usually having the camera bottom start at the shoulders on up.
-- See `labels.txt` for class order—adjust thresholds in `AdruinoModel.py` if needed.
+- See `labels.txt` for class order—adjust thresholds in `Python Code` if needed.
