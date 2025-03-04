@@ -36,7 +36,7 @@ Built using Google's Teachable Machine for training, Python for gesture detectio
 2. **Software Setup**:
    - Open `Arduino Code` in Arduino IDE, upload to your board (Tools > Port: check your port, e.g., `/dev/cu.usbmodem1101`).
    - Install Python dependencies: `pip install tensorflow opencv-python pyserial numpy`.
-   - Update `Pythin Code` with your serial port (e.g., `port = "/dev/cu.usbmodem1101"`) if different.
+   - Update `Python Code` with your serial port (e.g., `port = "/dev/cu.usbmodem1101"`) if different.
 3. **Running**:
    - Close Arduino IDE to free the serial port.
    - Run: `Python Code` (or your env’s path, e.g., `/Users/calebclauson/Desktop/Python/tf-env/bin/python`).
