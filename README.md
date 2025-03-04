@@ -34,12 +34,12 @@ Built using Google's Teachable Machine for training, Python for gesture detectio
    - Connect buzzer (positive to pin 7, negative to GND—resistor optional if active type).
    - Plug Arduino into your computer via USB.
 2. **Software Setup**:
-   - Open `SecurityAlarm.ino` in Arduino IDE, upload to your board (Tools > Port: check your port, e.g., `/dev/cu.usbmodem1101`).
+   - Open `Arduino Code` in Arduino IDE, upload to your board (Tools > Port: check your port, e.g., `/dev/cu.usbmodem1101`).
    - Install Python dependencies: `pip install tensorflow opencv-python pyserial numpy`.
-   - Update `AdruinoModel.py` with your serial port (e.g., `port = "/dev/cu.usbmodem1101"`) if different.
+   - Update `Pythin Code` with your serial port (e.g., `port = "/dev/cu.usbmodem1101"`) if different.
 3. **Running**:
    - Close Arduino IDE to free the serial port.
-   - Run: `python AdruinoModel.py` (or your env’s path, e.g., `/Users/calebclauson/Desktop/Python/tf-env/bin/python`).
+   - Run: `Python Code` (or your env’s path, e.g., `/Users/calebclauson/Desktop/Python/tf-env/bin/python`).
    - Press 'q' or Esc to exit the program safely.
 
 ## Usage
